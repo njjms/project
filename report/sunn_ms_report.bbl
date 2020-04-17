@@ -100,6 +100,37 @@
       \verb 10.1198/jabes.2009.07116
       \endverb
     \endentry
+    \entry{raynolds16}{article}{}
+      \name{author}{2}{}{%
+        {{hash=e7661d850a055adccdd841d37c535f32}{%
+           family={Raynolds},
+           familyi={R\bibinitperiod},
+           given={Martha},
+           giveni={M\bibinitperiod}}}%
+        {{hash=6fb06f4e0778c5e9056db52753e8997d}{%
+           family={Walker},
+           familyi={W\bibinitperiod},
+           given={Donald},
+           giveni={D\bibinitperiod}}}%
+      }
+      \strng{namehash}{bb18b588127df9f7e5ba2f5e1ecb418d}
+      \strng{fullhash}{bb18b588127df9f7e5ba2f5e1ecb418d}
+      \strng{bibnamehash}{bb18b588127df9f7e5ba2f5e1ecb418d}
+      \strng{authorbibnamehash}{bb18b588127df9f7e5ba2f5e1ecb418d}
+      \strng{authornamehash}{bb18b588127df9f7e5ba2f5e1ecb418d}
+      \strng{authorfullhash}{bb18b588127df9f7e5ba2f5e1ecb418d}
+      \field{sortinit}{R}
+      \field{sortinithash}{da6b42bd3ab22fee61abed031ee405f7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Environmental Research Letters}
+      \field{title}{Increased wetness counfounds Landsat-derived NDVI trends in the centeral Alaska Slope region, 1985-2011}
+      \field{volume}{11}
+      \field{year}{2016}
+      \verb{doi}
+      \verb https://iopscience.iop.org/article/10.1088/1748-9326/11/8/085004
+      \endverb
+    \endentry
   \enddatalist
 \endrefsection
 \endinput

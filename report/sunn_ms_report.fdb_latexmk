@@ -1,11 +1,11 @@
 # Fdb version 3
-["biber sunn_ms_report"] 1586510655 "sunn_ms_report.bcf" "sunn_ms_report.bbl" "sunn_ms_report" 1586510657
-  "ref.bib" 1586510643 1443 04dbaa1af4c8b67525a3ae44056d0a2b ""
-  "sunn_ms_report.bcf" 1586510657 88440 e8332022be7d2190ef796e2676a54a15 ""
+["biber sunn_ms_report"] 1586980879 "sunn_ms_report.bcf" "sunn_ms_report.bbl" "sunn_ms_report" 1587057273
+  "ref.bib" 1586980869 1779 d4e45bb25d4fe3c69a40612c13ccceba ""
+  "sunn_ms_report.bcf" 1587057273 88492 bdca33b8222b00cee315cd93e4cf3b2a ""
   (generated)
-  "sunn_ms_report.bbl"
   "sunn_ms_report.blg"
-["pdflatex"] 1586510656 "sunn_ms_report.tex" "sunn_ms_report.pdf" "sunn_ms_report" 1586510657
+  "sunn_ms_report.bbl"
+["pdflatex"] 1587057272 "sunn_ms_report.tex" "sunn_ms_report.pdf" "sunn_ms_report" 1587057273
   "/etc/texmf/web2c/texmf.cnf" 1579373987 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1511824771 3332 103109f5612ad95229751940c61aada0 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1480098698 1004 54797486969f23fa377b128694d548df ""
@@ -85,13 +85,15 @@
   "/usr/share/texmf/web2c/texmf.cnf" 1520210507 32485 c64754543d8ac501bea6e75e209ea521 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1586508333 127853 b41f58aff49fe1af38af8d065f49d51c ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1579374000 724918 7f9aa57d1790f45242d6d309e092213c ""
-  "sunn_ms_report.aux" 1586510657 1299 bc2e04bad3bbc19bf05ff1e5d14012cc ""
-  "sunn_ms_report.bbl" 1586510656 3975 e0e97e8cdf49cdcbf9fe74789cc63420 "biber sunn_ms_report"
-  "sunn_ms_report.run.xml" 1586510657 2368 7657660f0e670a4493a067b80c011414 ""
-  "sunn_ms_report.tex" 1586510561 1242 75841639d19acc7d0c5de073b5996731 ""
+  "images/raw_histograms.png" 1586978241 11684 39231d1ce5ed4a850b30e1d96669ec56 ""
+  "images/total_timber_map.png" 1587052414 78709 8cba890eac5ab405a5d7dc3fe40bd1e5 ""
+  "sunn_ms_report.aux" 1587057273 1709 3c904e113e7ed3354ab6decaabfc63e1 ""
+  "sunn_ms_report.bbl" 1586980880 5298 73c3f12d4b8fd6bc8a123eb4d917c0a2 "biber sunn_ms_report"
+  "sunn_ms_report.run.xml" 1587057273 2368 7657660f0e670a4493a067b80c011414 ""
+  "sunn_ms_report.tex" 1587057270 2112 c996140ab8e96d6406cddf56cbf055a3 ""
   (generated)
   "sunn_ms_report.run.xml"
+  "sunn_ms_report.bcf"
   "sunn_ms_report.pdf"
   "sunn_ms_report.aux"
-  "sunn_ms_report.bcf"
   "sunn_ms_report.log"

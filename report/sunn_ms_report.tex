@@ -3,6 +3,7 @@
 \usepackage{graphicx}
 \usepackage[backend=biber, bibencoding=utf8]{biblatex}
 \usepackage[margin=1in]{geometry}
+\graphicspath{{./images/}}
 \addbibresource{ref.bib}
 
 \title{Comparison of Gaussian copula and random forest in zero-inflated spatial prediction}
@@ -23,7 +24,25 @@
 \section{Introduction}
 Here is my introduction where I talk about the two methods: random forests\cite{rfsp} and Gaussian copula \cite{madsen09}
 
-%\includegraphics[scale=.4]{homework1q1}
+\section{Data}
+The forestry inventory data used here was made available by the Forestry Inventory and Analysis program of the USDA Forest Service.
+It contains inventory information on 13 variables of interest across 1224 plots of land in NW Oregon.
+The response variables of interest include total volume, total biomass, total number of trees, and volume of specific tree species.
+The dataset includes fuzzed latitude, longitude, and elevation information.
+The possible covariate variables include annual precipitation, tc3\cite{raynolds16} wetness index, annual temperature, NDVI, and cover.
+
+\begin{figure}[ht]
+\includegraphics[scale=.7]{total_timber_map}
+\centering
+\end{figure}
+
+The response variables are positively skewed and zero inflated.
+
+\begin{figure}[ht]
+	\includegraphics[scale=.4]{raw_histograms}
+	\centering
+	\caption{Histograms of raw response variables}
+\end{figure}
 
 \section{Methods}
 Here is my methods section where I talk about the math behind random forests and Gaussian copula\cite{verhoef02}.
