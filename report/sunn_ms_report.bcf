@@ -1923,10 +1923,16 @@
     <bcf:datasource type="file" datatype="bibtex">ref.bib</bcf:datasource>
   </bcf:bibdata>
   <bcf:section number="0">
-    <bcf:citekey order="1">rfsp</bcf:citekey>
-    <bcf:citekey order="2">madsen09</bcf:citekey>
-    <bcf:citekey order="3">raynolds16</bcf:citekey>
-    <bcf:citekey order="4">verhoef02</bcf:citekey>
+    <bcf:citekey order="1">miller04</bcf:citekey>
+    <bcf:citekey order="2">mills13</bcf:citekey>
+    <bcf:citekey order="3">hengl18</bcf:citekey>
+    <bcf:citekey order="4">madsen09</bcf:citekey>
+    <bcf:citekey order="5">raynolds16</bcf:citekey>
+    <bcf:citekey order="6">gaynanova18</bcf:citekey>
+    <bcf:citekey order="7">duan17</bcf:citekey>
+    <bcf:citekey order="8">madsen09</bcf:citekey>
+    <bcf:citekey order="9">breiman01</bcf:citekey>
+    <bcf:citekey order="10">hengl18</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nty">

@@ -1,6 +1,9 @@
 \documentclass{article}
 \usepackage{amsmath}
 \usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{caption}
+\captionsetup[figure]{font=small,labelfont=small}
 \usepackage[backend=biber, bibencoding=utf8]{biblatex}
 \usepackage[margin=1in]{geometry}
 \graphicspath{{./images/}}
@@ -15,37 +18,170 @@
 \maketitle
 
 \begin{abstract}
-	Spatial prediciton and interpolation arises in many fields like blah blah blah.
-	The random forest is blah blah blah.
-	The Gaussian copula is an extension of the spatial linear model that blah blah blah.
-	One sentence summary of simulation study results.
+	Forestry inventory is a critical part of monitoring and servicing ecosystems and often involves statistical estimation of quantities such as total wood volume.
+	However, forestry data is often zero-inflated, heavily skewed, and spatially dependent, making them difficult to model using traditional statistical and geostatistical models.
+	Two new techniques have been proposed to estimate spatially dependent data: a spatial Gaussian copula model and spatial random forests.
+	In this paper, we compare the predictive performance of these new models along with ordinary kriging on both simulated data and resampled real data.
 \end{abstract}
 
 \section{Introduction}
-Here is my introduction where I talk about the two methods: random forests\cite{rfsp} and Gaussian copula \cite{madsen09}
+An important component of maintaining national forests is inventory of forestry resources, such as total timber volume, total biomass, etc.
+Since forests can cover enormous areas over rough terrain, it is often not possible to sample certain areas of forests due to physical, budgetary, or time constraints.
+Spatial estimation and interpolation is often employed to fill gaps in sampling and calculate estimations of relevant inventory quantities.
+However, forestry data has several qualities that make it difficult to model.
+
+Spatial statistics has to deal with what is popularly known as Tobler's First Law: ``Everything is related to everything else, but near things are more related than distant things''\cite{miller04}.
+Simply put, forestry data at sampled points or plots is likely to be correlated with data points that are close by.
+This dependence structure precludes classical statistical models like ordinary least squares regression since those techniques rely on the assumption of independent and identially distributed data.
+
+Furthermore, forestry data is often \textit{semicontinuous} in that the distribution contains a point-mass at value 0 and a positive skewed distribution\cite{mills13}.
+This overdispersion often requires modeling using a mixture distribution which combines two data generating processes: one which only generates zeros and another which generates nonnegative, continuous values.
+Using these mixure distributions has been explored thoroughly in non-spatial cases, but standard spatial prediction and interpolation tools such as those available in \textbf{ArcGIS Geoanalyst Toolbox}\footnote{See ESRI documentation for more detail} do not have specialized methods to handle this semicontinuous data.
+
+This gives need for a geostatistical model which can incorporate spatial dependence and model overdispersion of zeros.
+In this paper, we give a brief overview of spatial random forests from the \textbf{RFsp R} package\cite{hengl18} and spatial Gaussian copula models\cite{madsen09} and compare their predictive performance in forestry applications using both simulated and resampled data.
 
 \section{Data}
-The forestry inventory data used here was made available by the Forestry Inventory and Analysis program of the USDA Forest Service.
-It contains inventory information on 13 variables of interest across 1224 plots of land in NW Oregon.
+
+The forestry inventory data used here was made available by the Forestry Inventory and Analysis program of the USDA Forest Service, containing inventory information on 13 variables of interest across 1224 plots of land in northwest Oregon.
+
+\begin{wrapfigure}{r}{.4\textwidth}
+	\includegraphics[width=.38\textwidth]{raw_histograms}
+	\caption{Histograms of response variables.}
+\end{wrapfigure}
+
 The response variables of interest include total volume, total biomass, total number of trees, and volume of specific tree species.
-The dataset includes fuzzed latitude, longitude, and elevation information.
-The possible covariate variables include annual precipitation, tc3\cite{raynolds16} wetness index, annual temperature, NDVI, and cover.
+Additionally, the dataset includes fuzzed\footnote{White noise is added to protect privacy of private landowners.} latitude, longitude, and elevation information.
+possible covariate variables include annual precipitation, tc3 wetness index\cite{raynolds16}, annual temperature, NDVI, and cover.
+
+Histograms of the response variables indicate that the data are positively skewed and zero inflated.
+Furthermore, some data exploration shows that a plot of the sampled points with an overlaid of contour mapping of annual precipation amount suggests that more timber is found in areas with high precipitation, although this is not always the case as there are high-valued sampled points which fall outside the areas of high precipitation.
 
 \begin{figure}[ht]
-\includegraphics[scale=.7]{total_timber_map}
+\includegraphics[scale=.5]{total_timber_map}
 \centering
 \end{figure}
 
-The response variables are positively skewed and zero inflated.
+\paragraph{Simulated Data} Using this original forestry dataset, we create \textit{$m_1$ = 1000} simulated datasets of size \textit{n = 1224} by drawing multivariate random normal samples with the calculated sample correlation matrix and backtransforming using the quantile function of the zero-inflated gamma function.
+We then randomly sample 300 points from each of the simulated datasets to use as training data for the copula and random forest models.
+Afterwards, the models predictive capabilities are tested on the remaining 924 test points.
 
-\begin{figure}[ht]
-	\includegraphics[scale=.4]{raw_histograms}
-	\centering
-	\caption{Histograms of raw response variables}
-\end{figure}
+It was difficult to also simulate the covariates which preserve the original relationships between the covariates and the responses, therefore, only the responses were simulated for this study.
+The Gaussian copula and the random forests will be used solely then on the geographic locations of the data points and the values at each of hte simulated points.
+
+\paragraph{Resampled Data} Again using the original forestry dataset, we obtain \textit{$m_2$ = 1000} resampled datasets of size \textit{n = 200} by sampling rows without replacement from the data and treating that as the training data.
+We then compare the performance of the trained models in predicting the values of the remaining 1024 points.
 
 \section{Methods}
-Here is my methods section where I talk about the math behind random forests and Gaussian copula\cite{verhoef02}.
+
+\subsection{Kriging}
+In geostatistics, kriging is a method of spatial interpolation where values at unobserved locations are estimated using a weighted sum of known values.
+In many regards, kriging is very similar in principle to regression analysis.
+In particular, if the data is normally distributed and satisfies \textit{second order stationarity}, this is, if the covariances of points is a function only of the distance between the points and not the specific physical location of the points themselves, then kriging is the \textit{Best Linear Unbiased Estimator} via the Gauss-Markov theorem.
+The weights $w$ obtained by kriging are unbiased and minimize estimation variance.
+
+$$
+\hat{y}_{OK}(s_0) = w(s_0)^T y
+$$
+
+If the response at point $u_\alpha$ is defined as the function $Z(u_\alpha)$, covariance between points is estimated using the semivariogram function which is defined for a lag distance $h$ as
+
+$$
+\gamma(h) = \frac{1}{2 N(h)} \sum_{i=1}^{N(h)} (Z(u_{\alpha}) - Z(u_{\alpha} + h))^2
+$$
+
+where $N(h)$ is the number of pairs separated by distance $h$.
+This function $\gamma(h)$ is one half the average of squared differences on the pairs $N(h)$ and quantifies the relationship of difference over distance.
+Using this function, we can calculate the covariance $C(h) = \sigma^2 - \gamma(h)$ where $\sigma^2$ is the sample variance of all points.
+
+As an estimation approach, kriging makes use of distance between points as well as axes of spatial continuity and redundancy of data points.
+Kriging therefore is a very popular technique among spatial analysts since it incorporates a lot of information into the modelling process.
+However, kriging still has underlying assumptions of a Gaussian process, making it ill-suited for semicontinuous data.
+
+\subsection{Spatial Gaussian Copula}
+Copulas are multivariate cumulative distribution functions where each variable has a standard uniform marginal distribution.
+Copulas were developed to describe dependency structures between random variables and have been previously applied to microRNA\cite{gaynanova18} and box-office data\cite{duan17}.
+Sklar's Theorem states that every $n$-dimensional multivarite cumulative distribution function $G(\vec{X})$ of a random vector $\vec{X} = (X_1, \ldots ,X_n)$ can be expressed in terms of the marginal cumulative distribution functions $F_i(X_i)$ and a copula function $C: [0,1]^n \rightarrow [0,1]$.
+
+$$
+G(\vec{X}) = C(F_1(X_1), \ldots, F_n(X_n))
+$$
+
+There are many possible choices for $C$, but a popular selection is the multivariate normal CDF $\Phi_{\Sigma}$ where $\Sigma$ is the correlation matrix describing the relationship between the variables.
+
+Madsen\cite{madsen09} proposed a spatial Gaussian copula
+
+$$
+G(\vec{V}, \Sigma) = \Phi_{\Sigma}(\Phi^{-1}(F_1(v_1)), \ldots, \Phi^{-1}(F_n(v_n)))
+$$
+
+where the correlation matrix $\Sigma$ is chosen such that it represents the spatial relationships between each of the data points.
+Differentiation the above copula yield the joint density function of the spatially dependent data
+
+$$
+g(\vec{V}) = \| \Sigma \|^{1/2} \text{exp}\left(-\frac{1}{2} z^T (\Sigma^{-1} - I_n) z\right) \prod_{i = 1}^m f_i(y_i)
+$$
+
+where $z = (\Phi^{-1}(F_1(y_1)), \ldots, \Phi^{-1}(F_n(y_n)))$.
+This copula will be able to incorporate the spatial dependency structure, however this method requires the appropriate selection of $F$ and $\Sigma$.
+
+A common choice for spatial correlation matrix $\Sigma$ has $i,j$th entry equal to the value of the exponential correlogram function
+
+$$
+\Sigma_{ij}(\theta) = 
+	\begin{cases}
+		\theta_0 \text{exp}(-h_{ij} \theta_1) & \text{ for } i \neq j\\
+		1 & \text{ when } i = j
+	\end{cases}
+$$
+
+where $h_{ij}$ is the distance between the locations $y_i$ and $y_j$, $0 < \theta_0 \leq 1$ is the nugget parameter describing the variation of the data at $h = 0$, and $\theta_1 > 0$ is the decay parameter.
+These parameters can be estimated from the original data.
+
+An appropriate $F$ function would be one which can handle semicontinuous data.
+In this paper, we have chosen to use a zero-inflated gamma function on cube-root transformed response data.
+
+\begin{align*}
+&f(x) = 
+\begin{cases}
+	0 & \text{ w.p } p \\
+	\frac{1}{\Gamma(\alpha) \beta^\alpha} x^{\alpha -1} \text{exp}\left(-\frac{x}{\beta}\right) & \text{ w.p. } 1 - p 
+\end{cases} 
+\\
+&\text{where } p \sim \text{Bernoulli}(\pi)
+\end{align*}
+
+The cube root transformation was necessary to make the continuous component less heavily skewed.
+Additionally, for the purposes of the copula model, zero values were instead replaced with uniform random variables sampled from a $U(0, \epsilon)$ distribution where $\epsilon$ is the smallest nonzero value in the observed dataset.
+
+The complete process for predicting unobserved values using the Gaussian copula model will involve the following steps.
+
+\begin{enumerate}
+	\item Use the observed values to get estimates for the spatial covariance parameters $\theta_0, \theta_1$, and the ZIG parameters $\beta$, $\mu_i$, and $\pi_i, \forall i$
+	\item Transform the observed ZIG response variables into standard normal variables using the CDF of the ZIG with the estimated parameters.
+	\item Use kriging on the standard normal random variables to get estimates for the unobserved values using the formula $\hat{Y}_{unobs} = \Sigma^T_{obs, unobs} \Sigma_{obs}^{-1} Y$
+	\item Backtransform these unobserved standard normal values to get predictions for the unobserved values on the original scale
+\end{enumerate}
+
+\subsection{Spatial Random Forest}
+The random forest is a machine learning algorithm which creates an ensemble of weak learners from bootstrapped samples of the original data\cite{breiman01}.
+While individual decision trees are prone to overfitting on training data, a large collection of randomly generated weak learners is less prone to these biases.
+The prediction of the random forest is taken as the mode or average of the entire ensemble.
+One of the notable advantages of using a machine learning algorithm like random forests is that no statistical assumptions are required, therefore, we are not required to transform the shape of the data as we had to in the Gaussian copula model.
+
+Random forest have been used in spatial prediction, but the spatial information is often disregarded\cite{hengl18}.
+Ignoring spatial autocorrelation can result in biased predictions.
+In order to incorporate this information in the model, the \textbf{RFsp} packages introduces the spatial random forest which uses buffer distances from observed points as explanatory variables.
+The generic spatial random forest system is proposed in terms of three main input components:
+
+$$
+Y(s) = f(X_G, X_R, X_P)
+$$
+
+where $X_G$ are covariates based on geographic proximity or spatial relationships, $X_R$ is surface reflectance covariates, and $X_P$ are process-based covariates.
+
+The \textbf{RFsp} packages is built on top of the \textbf{ranger} \texttt{R} package which supports high dimensional datasets.
+However, the authors of spatial random forest caution that since distances need to be calculated in order to include spatial information, \textbf{RFsp} might be slow for large datasets.
 
 \section{Results}
 Here is my results section where I talk about the outcome of my simulation studies

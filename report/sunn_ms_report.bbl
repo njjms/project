@@ -19,7 +19,7 @@
 
 \refsection{0}
   \datalist[entry]{nty/global//global/global}
-    \entry{rfsp}{online}{}
+    \entry{hengl18}{article}{}
       \name{author}{1}{}{%
         {{hash=7b08523bba3a0bb39836947920ad00d0}{%
            family={al},
@@ -39,38 +39,63 @@
       \field{sortinithash}{d77c7cdd82ff690d4c3ef13216f92f0b}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{title}{RFsp - Random Forest for spatial data (R tutorial)}
-      \verb{urlraw}
-      \verb https://peerj.com/preprints/26693v1/GeoMLA_README_thengl.pdf
-      \endverb
-      \verb{url}
-      \verb https://peerj.com/preprints/26693v1/GeoMLA_README_thengl.pdf
+      \field{journaltitle}{PeerJ - Life and Environment}
+      \field{title}{Random forest as a generic framework for predictive modeling of spatial and spatio-temporal variables}
+      \field{year}{2018}
+      \verb{doi}
+      \verb 10.7717/peerj.5518
       \endverb
     \endentry
-    \entry{verhoef02}{article}{}
+    \entry{breiman01}{article}{}
       \name{author}{1}{}{%
-        {{hash=731ca741c95ea4f866f0220e58e84acf}{%
-           family={Hoef},
-           familyi={H\bibinitperiod},
-           given={Jay\bibnamedelimb M.\bibnamedelimi Ver},
-           giveni={J\bibinitperiod\bibinitdelim M\bibinitperiod\bibinitdelim V\bibinitperiod}}}%
+        {{hash=132b7100417675d55d5d4d8b244f7a34}{%
+           family={Breiman},
+           familyi={B\bibinitperiod},
+           given={Leo},
+           giveni={L\bibinitperiod}}}%
       }
-      \strng{namehash}{731ca741c95ea4f866f0220e58e84acf}
-      \strng{fullhash}{731ca741c95ea4f866f0220e58e84acf}
-      \strng{bibnamehash}{731ca741c95ea4f866f0220e58e84acf}
-      \strng{authorbibnamehash}{731ca741c95ea4f866f0220e58e84acf}
-      \strng{authornamehash}{731ca741c95ea4f866f0220e58e84acf}
-      \strng{authorfullhash}{731ca741c95ea4f866f0220e58e84acf}
-      \field{sortinit}{H}
-      \field{sortinithash}{5f15a7bc777ad49ff15aa4d2831b1681}
+      \strng{namehash}{132b7100417675d55d5d4d8b244f7a34}
+      \strng{fullhash}{132b7100417675d55d5d4d8b244f7a34}
+      \strng{bibnamehash}{132b7100417675d55d5d4d8b244f7a34}
+      \strng{authorbibnamehash}{132b7100417675d55d5d4d8b244f7a34}
+      \strng{authornamehash}{132b7100417675d55d5d4d8b244f7a34}
+      \strng{authorfullhash}{132b7100417675d55d5d4d8b244f7a34}
+      \field{sortinit}{B}
+      \field{sortinithash}{276475738cc058478c1677046f857703}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{journaltitle}{Ecoscience}
-      \field{title}{Sampling and geostatistics for spatial data}
-      \field{volume}{9}
-      \field{year}{2002}
-      \field{pages}{152\bibrangedash 161}
-      \range{pages}{10}
+      \field{journaltitle}{Machine Learning}
+      \field{title}{Random Forests}
+      \field{volume}{45}
+      \field{year}{2001}
+    \endentry
+    \entry{duan17}{article}{}
+      \name{author}{1}{}{%
+        {{hash=03a8959a949958edf2adbafc9ede3ebf}{%
+           family={Junwen\bibnamedelima Duan},
+           familyi={J\bibinitperiod\bibinitdelim D\bibinitperiod},
+           given={Ting\bibnamedelima Liu},
+           giveni={T\bibinitperiod\bibinitdelim L\bibinitperiod},
+           suffix={Xiao\bibnamedelima Ding},
+           suffixi={X\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+      }
+      \strng{namehash}{03a8959a949958edf2adbafc9ede3ebf}
+      \strng{fullhash}{03a8959a949958edf2adbafc9ede3ebf}
+      \strng{bibnamehash}{03a8959a949958edf2adbafc9ede3ebf}
+      \strng{authorbibnamehash}{03a8959a949958edf2adbafc9ede3ebf}
+      \strng{authornamehash}{03a8959a949958edf2adbafc9ede3ebf}
+      \strng{authorfullhash}{03a8959a949958edf2adbafc9ede3ebf}
+      \field{sortinit}{J}
+      \field{sortinithash}{fce5f8d0bd05e8d93f3dbe21c78897ca}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Science China}
+      \field{title}{A Gaussian copula regression model for movie box-office revenue prediction}
+      \field{volume}{60}
+      \field{year}{2017}
+      \verb{doi}
+      \verb 10.1007/s11432-015-0905-6
+      \endverb
     \endentry
     \entry{madsen09}{article}{}
       \name{author}{1}{}{%
@@ -99,6 +124,59 @@
       \verb{doi}
       \verb 10.1198/jabes.2009.07116
       \endverb
+    \endentry
+    \entry{miller04}{article}{}
+      \name{author}{1}{}{%
+        {{hash=337a0c7d0be87c6b7784207a2e878f8e}{%
+           family={Miller},
+           familyi={M\bibinitperiod},
+           given={Harvey\bibnamedelima J.},
+           giveni={H\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+      }
+      \strng{namehash}{337a0c7d0be87c6b7784207a2e878f8e}
+      \strng{fullhash}{337a0c7d0be87c6b7784207a2e878f8e}
+      \strng{bibnamehash}{337a0c7d0be87c6b7784207a2e878f8e}
+      \strng{authorbibnamehash}{337a0c7d0be87c6b7784207a2e878f8e}
+      \strng{authornamehash}{337a0c7d0be87c6b7784207a2e878f8e}
+      \strng{authorfullhash}{337a0c7d0be87c6b7784207a2e878f8e}
+      \field{sortinit}{M}
+      \field{sortinithash}{cfd219b90152c06204fab207bc6c7cab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Annals of the Association of American Geographers}
+      \field{title}{Tobler's First Law and Spatial Analysis}
+      \field{volume}{94}
+      \field{year}{2004}
+      \field{pages}{284\bibrangedash 289}
+      \range{pages}{6}
+      \verb{doi}
+      \verb www.jstor.org/stable/3693985
+      \endverb
+    \endentry
+    \entry{mills13}{thesis}{}
+      \name{author}{1}{}{%
+        {{hash=70b0fd31b4f3316749c48d14759d2814}{%
+           family={Mills},
+           familyi={M\bibinitperiod},
+           given={Elizabeth\bibnamedelima Dastrup},
+           giveni={E\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+      }
+      \list{institution}{1}{%
+        {University of Iowa, Department of Biostatistics}%
+      }
+      \strng{namehash}{70b0fd31b4f3316749c48d14759d2814}
+      \strng{fullhash}{70b0fd31b4f3316749c48d14759d2814}
+      \strng{bibnamehash}{70b0fd31b4f3316749c48d14759d2814}
+      \strng{authorbibnamehash}{70b0fd31b4f3316749c48d14759d2814}
+      \strng{authornamehash}{70b0fd31b4f3316749c48d14759d2814}
+      \strng{authorfullhash}{70b0fd31b4f3316749c48d14759d2814}
+      \field{sortinit}{M}
+      \field{sortinithash}{cfd219b90152c06204fab207bc6c7cab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Adjusting for covariates in zero-inflated gamma and zero-inflated log-normal models for semicontinuous data}
+      \field{type}{phdthesis}
+      \field{year}{2013}
     \endentry
     \entry{raynolds16}{article}{}
       \name{author}{2}{}{%
@@ -129,6 +207,42 @@
       \field{year}{2016}
       \verb{doi}
       \verb https://iopscience.iop.org/article/10.1088/1748-9326/11/8/085004
+      \endverb
+    \endentry
+    \entry{gaynanova18}{misc}{}
+      \name{author}{3}{}{%
+        {{hash=a7a2d97822d503f3ec0a5a450a29eac6}{%
+           family={Yoon},
+           familyi={Y\bibinitperiod},
+           given={Grace},
+           giveni={G\bibinitperiod}}}%
+        {{hash=af2d73df255fca2857675bc84e3fee98}{%
+           family={Carroll},
+           familyi={C\bibinitperiod},
+           given={Raymond\bibnamedelima J.},
+           giveni={R\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=e9de91dad218175c20b080766467eca9}{%
+           family={Gaynanova},
+           familyi={G\bibinitperiod},
+           given={Irina},
+           giveni={I\bibinitperiod}}}%
+      }
+      \strng{namehash}{789137447424f06ea2a818e5f8f54cb5}
+      \strng{fullhash}{789137447424f06ea2a818e5f8f54cb5}
+      \strng{bibnamehash}{789137447424f06ea2a818e5f8f54cb5}
+      \strng{authorbibnamehash}{789137447424f06ea2a818e5f8f54cb5}
+      \strng{authornamehash}{789137447424f06ea2a818e5f8f54cb5}
+      \strng{authorfullhash}{789137447424f06ea2a818e5f8f54cb5}
+      \field{sortinit}{Y}
+      \field{sortinithash}{b8d711a035f7be9840c721c82920477e}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprintclass}{stat.ME}
+      \field{eprinttype}{arXiv}
+      \field{title}{Sparse semiparametric canonical correlation analysis for data of mixed types}
+      \field{year}{2018}
+      \verb{eprint}
+      \verb 1807.05274
       \endverb
     \endentry
   \enddatalist
