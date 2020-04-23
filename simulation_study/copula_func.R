@@ -3,13 +3,13 @@
 #
 # Code for calculating spatial parameters for use in the spatial Gaussian copula and using them for prediction
 
-source("ZIGFunctions.R")
+source("../ZIGFunctions.R")
 source("preprocess.R")
 library(gstat)
 library(sp)
 library(fields)
 
-calculate_spatial_params <- function(simdata, testdata, zeros, n = 300, cube.root.transform = TRUE, plot.var = FALSE) {
+calculate_spatial_params <- function(simdata, testdata, zeros) {
     
     #' Calculates Method of Moments estimates for Gamma model and the spatial covariance parameters for ordinary kriging
     #' For use with the simulated datasets - no covariate information used here
@@ -40,24 +40,19 @@ calculate_spatial_params <- function(simdata, testdata, zeros, n = 300, cube.roo
     }, message = function(mes) {
         message("Hmm something weird.")
     })
-    if (plot.var) {
-        plot(emp_var,v_fit)
-    }
     
     alphaN<-v_fit$psill[2]/sum(v_fit$psill) # nugget parameter
     alphaR<-v_fit$range[2] # decay parameter
    
     #Calculate spatial correlation matrix w. exponential form for observed points!
     Sigma_obs<-alphaN*exp(-(H/alphaR)^2)
-    diag(Sigma)<-1
+    diag(Sigma_obs)<-1
     
     #Calculate spatial correlation matrix for observed/unobserved points! 
     H_obs_noobs <- as.matrix(rdist(simdata[,c("x", "y")], testdata[,c("x", "y")]))
     Sigma_obs_noobs <- alphaN*exp(-(H_obs_noobs/alphaR)^2)
     
     output <- list(
-      train = simdata,
-      test = testdata,
       Sigma_obs = Sigma_obs,
       Sigma_obs_noobs = Sigma_obs_noobs,
       alphaN = alphaN,
@@ -73,7 +68,7 @@ calculate_spatial_params <- function(simdata, testdata, zeros, n = 300, cube.roo
 
 calculate_zhat_gauscop <- function(resp, mu, beta, epsilon, Pi, Sigma_obs, Sigma_obs_noobs) {
     
-  #' Calculate predictions for unobserved locations using spatial gaussian copula
+  #' Calculate predictions for unobserved locations using spatial gaussian copula and matrix algebra
   #' 
   #' @param resp vector of transformed observed values
   #' @param mu vector of computed row-wise values

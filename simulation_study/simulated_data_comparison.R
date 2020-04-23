@@ -23,50 +23,56 @@ full_simdata <- data.frame(
     resp = simdata[2,]
 )
 
-tmp <- split_data(full_simdata, n = 300, cube.root.transform = TRUE)
-transformed_tmp <- cube_root_fix_zeros(tmp$train)
-tmp$train <- transformed_tmp$transformed_data
-tmp$zeros <- transformed_tmp$zeros
-tmp$epsilon <- transformed_tmp$epsilon
-tmp$Pi <- transformed_tmp$Pi
+set.seed(182)
+tmp <- split_data(full_simdata, n = 300)
+transformed.training.set <- cube_root_fix_zeros(tmp$train)
+# str(transformed.training.set)
+
+theta <- calculate_spatial_params(simdata = transformed.training.set$transformed_data,
+                                  testdata = tmp$test,
+                                  zeros = transformed.training.set$zeros)
+str(theta)
+
+calculate_zhat_gauscop(resp = transformed.training.set$transformed_data$resp,
+                       mu = theta$mu,
+                       beta = theta$beta,
+                       epsilon = transformed.training.set$epsilon,
+                       Pi = transformed.training.set$Pi,
+                       Sigma_obs = theta$Sigma_obs,
+                       Sigma_obs_noobs = theta$Sigma_obs_noobs) -> zhat.zigs.df
+
+hist(zhat.zigs.df$zigs)
+
+yhat <- backtransform_gauscop(zhat.zigs.df$zigs, transformed.training.set$epsilon)
+plot(tmp$test$resp, yhat)
+
+# Compare this to ordinary kriging
+
+ord_kriging(training_data = tmp$train,
+            test_points = tmp$test) -> ok_model
 
 
-hist(spt_tmp$Y)
-hist(pzig(y = spt_tmp$Y, mu = spt_tmp$mu, beta = spt_tmp$beta, epsilon = spt_tmp$epsilon, Pi = spt_tmp$Pi))
-hist(z)
-qqnorm(z)
-qqline(z)
+plot(tmp$test$resp, ok_model$var1.pred,
+     main = "Ordinary Kriging",
+     xlab = "Actual Responses",
+     ylab = "Predicted Responses")
 
-
-
-
-training_data <- spt_tmp$train
-test_points <- spt_tmp$test
-hist(training_data$resp)
-ok <- ord_kriging(training_data, test_points)
-yhat <- backtransform(ok$var1.pred, spt_tmp$epsilon)
+par(mfrow=c(1,3))
+hist(tmp$test$resp)
 hist(yhat)
-plot(spt_tmp$test$resp, yhat)
+hist(ok_model$var1.pred)
+par(mfrow=c(1,1))
 
-training_data$z <- z
-ok_model <- krige(z ~ 1, training_data, test_points, model = z.fit)
-yhat <- ok_model$var1.pred
-hist(yhat)
-hist(pz)
-pz <- pnorm(yhat)
-pz[which(pz==1)] <- 1-.Machine$double.eps
-pz[which(pz==0)] <- .Machine$double.eps
+# Compare this to RFSP
 
-zigs <- qzig(u = pz, mu = spt_tmp$mu, beta = spt_tmp$beta, epsilon = spt_tmp$epsilon, Pi = spt_tmp$Pi[1])  
-hist(zigs)
-hist(zigs)
+set.seed(1)
+tmp1 <- split_data(full_simdata, n = 300)
+training_data <- tmp1$train
+test_points <- tmp1$test
 
-plot(spt_tmp$test$resp, zigs)
+calculate_rfsp_predictions(training_data = tmp1$train,
+                           test_points = tmp1$test) -> rfsp_model
+hist(rfsp_model$predictions)
+plot(tmp1$test$resp, rfsp_model$predictions)
 
-class(full_simdata)
-head(full_simdata)
-coordinates(full_simdata) <- ~x+y
-lzn.vgm <- variogram(resp ~ 1, full_simdata)
-lzn.fit <- fit.variogram(lzn.vgm, vgm("Gau"))
-plot(lzn.vgm, lzn.fit)
 

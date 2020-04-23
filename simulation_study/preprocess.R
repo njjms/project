@@ -41,7 +41,7 @@ cube_root_fix_zeros <- function(data, cube.root.transform = TRUE, correct.zeros 
     }
     zeros <- which(data$resp == 0)
     epsilon <- min(data$resp[-zeros])
-    Pi <- rep(length(zeros)/n, n)
+    Pi <- rep(length(zeros)/nrow(data), nrow(data))
     
     if (correct.zeros) {
     data$resp[zeros] <- runif(length(zeros), 0, epsilon)
@@ -54,7 +54,7 @@ cube_root_fix_zeros <- function(data, cube.root.transform = TRUE, correct.zeros 
     return(output)
 }
 
-cube_replace_zeros <- function(preds, epsilon) {
+backtransform_gauscop <- function(preds, epsilon) {
     
     #' Function to back transform cube root and replace small values with 0
     #' 

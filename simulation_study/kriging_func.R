@@ -66,7 +66,7 @@ ord_kriging <- function(training_data, test_points) {
   
   resp.vgm <- variogram(resp ~ 1, training_data)
   tryCatch({
-    resp.fit <- fit.variogram(z.vgm, vgm("Gau"))
+    resp.fit <- fit.variogram(resp.vgm, vgm("Gau"))
   }, warning = function(war) {
     stop("Variogram did not converge.")
   })
