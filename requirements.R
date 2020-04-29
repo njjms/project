@@ -7,7 +7,8 @@ install.packages(c("sp",
                    "geoR",
                    "GSIF",
                    "raster",
-                   "fields"))
+                   "fields",
+                   "automap"))
 
 # For plotting and data cleaning:
 

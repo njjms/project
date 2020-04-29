@@ -8,7 +8,8 @@ library(gstat)
 
 ord_kriging_z <- function(training_data, test_points, test_z) {
     
-    #' Perform ordinary kriging on z-hat standard normal values to get predictions for unobserved values
+    #' Perform ordinary kriging on z-hat standard normal values to get predictions for unobserved values.
+    #' Makes use of function in the automap package.
     #' 
     #' @param training_data dataframe of observed locations
     #' @param test_points dataframe of unobserved locations
@@ -28,25 +29,29 @@ ord_kriging_z <- function(training_data, test_points, test_z) {
     coordinates(training_data) <- ~x+y
     coordinates(test_points) <- ~x+y
     
-    z.vgm <- variogram(z ~ 1, training_data)
-    tryCatch({
-        z.fit <- fit.variogram(z.vgm, vgm("Gau"))
-    }, warning = function(war) {
-        stop("Variogram did not converge.")
-    })
+    ok_model_z <- autoKrige(z ~ 1,
+                            input_data = training_data,
+                            new_data = test_points)
+    # z.vgm <- variogram(z ~ 1, training_data)
+    # tryCatch({
+    #     z.fit <- fit.variogram(z.vgm, vgm("Gau"))
+    # }, warning = function(war) {
+    #     stop("Variogram did not converge.")
+    # })
     
-    tryCatch({
-        invisible(ok_model_z <- krige(z ~ 1, training_data, test_points, model = z.fit))
-    }, warning = function(war) {
-        stop("Ordinary Kriging not successful.")
-    })
+    # tryCatch({
+    #     invisible(ok_model_z <- krige(z ~ 1, training_data, test_points, model = z.fit))
+    # }, warning = function(war) {
+    #     stop("Ordinary Kriging not successful.")
+    # })
     
     return(ok_model_z)
 }
 
 ord_kriging <- function(training_data, test_points) {
     
-    #' Perform ordinary kriging on untransformed to get predictions for unobserved values
+    #' Perform ordinary kriging on untransformed to get predictions for unobserved values.
+    #' Makes use of function from gstat package.
     #' 
     #' @param training_data dataframe of observed locations
     #' @param test_points dataframe of unobserved locations
@@ -79,3 +84,4 @@ ord_kriging <- function(training_data, test_points) {
   
   return(ok_model)
 }
+
