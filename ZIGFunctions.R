@@ -27,14 +27,31 @@ pzig <- function(y,mu,beta,epsilon,Pi) {
 dzig <- function(y,mu,beta,epsilon,Pi) {
   Pi*dunif(y,0,epsilon) + (1-Pi)*dsgamma(y,mu,beta,epsilon)
 }
+
 qzig <- function(u,mu,beta,epsilon,Pi) {
   ix <- which(u<=Pi)
-  result <- numeric(length=length(u))
-  result[ix] <- qunif(u[ix]/Pi[ix],0,epsilon) 
-  result[-ix] <- qsgamma((u[-ix]-Pi[-ix])/(1-Pi[-ix]),mu[-ix],beta,epsilon)
-  return(result)
-  #ifelse(u<=Pi,qunif(u/Pi,0,epsilon),qsgamma((u-Pi)/(1-Pi),mu,beta,epsilon)) # gives warnings.
+  if (length(ix) == 0) {
+      # no standard uniforms are less than Pi
+      result <- qsgamma((u - Pi)/(1 - Pi), mu, beta, epsilon)
+      return(result)
+  } else {
+      result <- numeric(length=length(u))
+      result[ix] <- qunif(u[ix]/Pi[ix],0,epsilon) 
+      result[-ix] <- qsgamma((u[-ix]-Pi[-ix])/(1-Pi[-ix]),mu[-ix],beta,epsilon)
+      return(result)
+      #ifelse(u<=Pi,qunif(u/Pi,0,epsilon),qsgamma((u-Pi)/(1-Pi),mu,beta,epsilon)) # gives warnings.
+  }
 }
+
+# qzig <- function(u,mu,beta,epsilon,Pi) {
+#   ix <- which(u<=Pi)
+#   result <- numeric(length=length(u))
+#   result[ix] <- qunif(u[ix]/Pi[ix],0,epsilon) 
+#   result[-ix] <- qsgamma((u[-ix]-Pi[-ix])/(1-Pi[-ix]),mu[-ix],beta,epsilon)
+#   return(result)
+#   #ifelse(u<=Pi,qunif(u/Pi,0,epsilon),qsgamma((u-Pi)/(1-Pi),mu,beta,epsilon)) # gives warnings.
+# }
+
 rzig <- function(n,mu,beta,epsilon,Pi) {
   p <- rbinom(n,1,Pi)
   p*runif(n,0,epsilon) + (1-p)*rsgamma(n,shape=mu/beta,scale=beta,epsilon) 

@@ -25,12 +25,20 @@ sim.sets.n <- 1000
 
 obs_responses <- vector(mode = "list",
                         length = sim.sets.n)
-gauscop_predictions <- vector(mode = "list",
+gauscop_predictions_alg <- vector(mode = "list",
+                              length =sim.sets.n)
+gauscop_predictions_krige <- vector(mode = "list",
                               length =sim.sets.n)
 rfsp_predictions <- vector(mode = "list",
                           length = sim.sets.n)
 ok_predictions <- vector(mode = "list",
                          length = sim.sets.n)
+
+gauscop_times <- vector(mode = "numeric", length = sim.sets.n)
+rfsp_times <- vector(mode = "numeric", length = sim.sets.n)
+ok_times <- vector(mode = "numeric", length = sim.sets.n)
+
+epsilons <- vector(mode = "numeric", length = sim.sets.n)
 
 start <- Sys.time()
 
@@ -46,97 +54,145 @@ for (i in 1:sim.sets.n) {
     theta <- NULL
     rfsp_model <- NULL
     
+    tmp <- split_data(full_simdata, n = train.n)
+    
     # Create spatial random forest model
-    while(is.null(rfsp_model)){
-        tmp <- split_data(full_simdata, n = train.n)
-        try(
-            calculate_rfsp_predictions(training_data = tmp$train,
-                                       test_points = tmp$test) -> rfsp_model
-        )
-    }
+    rfsp_start <- Sys.time()
+    rfsp_model <- calculate_rfsp_predictions_rasterpd(training_data = tmp$train, test_points = tmp$test)
+    rfsp_time <- Sys.time() - rfsp_start
+    
+    # while(is.null(rfsp_model)){
+    #     tmp <- split_data(full_simdata, n = train.n)
+    #     try(
+    #         calculate_rfsp_predictions(training_data = tmp$train,
+    #                                    test_points = tmp$test) -> rfsp_model
+    #     )
+    # }
     
     # Create spatial Gaussian copula model
+    gauscop_start <- Sys.time()
     transformed.training.set <- cube_root_fix_zeros(tmp$train)
-    while(is.null(theta)) {
-        try(
-            theta <- calculate_spatial_params(simdata = transformed.training.set$transformed_data,
-                                              testdata = tmp$test,
-                                              zeros = transformed.training.set$zeros)
-        )
-    }
+    epsilons[i] <- transformed.training.set$epsilon
+    
+    theta <- calculate_spatial_params(simdata = transformed.training.set$transformed_data,
+                                      testdata = tmp$test,
+                                      zeros = transformed.training.set$zeros)
     krige_zhat_gauscop(resp = transformed.training.set$transformed_data$resp,
                        mu = theta$mu,
                        beta = theta$beta,
                        epsilon = transformed.training.set$epsilon,
                        Pi = transformed.training.set$Pi,
                        training_data = tmp$train,
-                       test_data = tmp$test) -> zhat.zigs.df
+                       test_data = tmp$test) -> zhat.zigs.df.krige
+    calculate_zhat_gauscop(resp = transformed.training.set$transformed_data$resp,
+                           mu = theta$mu,
+                           beta = theta$beta,
+                           epsilon = transformed.training.set$epsilon,
+                           Pi = transformed.training.set$Pi,
+                           Sigma_obs = theta$Sigma_obs,
+                           Sigma_obs_noobs = theta$Sigma_obs_noobs) -> zhat.zigs.df.alg
     
-    # calculate_zhat_gauscop(resp = transformed.training.set$transformed_data$resp,
-    #                        mu = theta$mu,
-    #                        beta = theta$beta,
-    #                        epsilon = transformed.training.set$epsilon,
-    #                        Pi = transformed.training.set$Pi,
-    #                        Sigma_obs = theta$Sigma_obs,
-    #                        Sigma_obs_noobs = theta$Sigma_obs_noobs) -> zhat.zigs.df
-    
-    yhat_gauscop <- backtransform_gauscop(zhat.zigs.df$zigs, transformed.training.set$epsilon)
+    yhat_gauscop_krige <- backtransform_gauscop(zhat.zigs.df.krige$zigs, transformed.training.set$epsilon)
+    yhat_gauscop_alg <- backtransform_gauscop(zhat.zigs.df.alg$zigs, transformed.training.set$epsilon)
+    gauscop_time <- Sys.time() - gauscop_start
     
     # Create ordinary kriging model
+    ok_start <- Sys.time()
     training_data.cpy <- tmp$train
     test_data.cpy <- tmp$test
     coordinates(training_data.cpy) <- ~x+y
     coordinates(test_data.cpy) <- ~x+y
     
     ak_model <- autoKrige(resp ~ 1, training_data.cpy, test_data.cpy)
-    
-    # Finally, get RMSPE for all three models
-    
-    # rmspe(rfsp_model$predictions, tmp$test$resp)
-    # rmspe(ak_model$krige_output$var1.pred, tmp$test$resp)
-    # rmspe(yhat_gauscop, tmp$test$resp)
+    ok_time <- Sys.time() - ok_start
     
     obs_responses[[i]] <- tmp$test$resp
-    gauscop_predictions[[i]] <- yhat_gauscop
+    gauscop_predictions_alg[[i]] <- yhat_gauscop_alg
+    gauscop_predictions_krige[[i]] <- yhat_gauscop_krige
     rfsp_predictions[[i]] <- rfsp_model$predictions
     ok_predictions[[i]] <- ak_model$krige_output$var1.pred
     
-    print(paste0("Completed set: ", toString(i)))
+    gauscop_times[i] <- gauscop_time
+    rfsp_times[i] <- rfsp_time
+    ok_times[i] <- ok_time
     
+    print(paste0("Completed set: ", toString(i)))
 }
 
 Sys.time() - start
 
 sim.final.df <- data.frame(
     obs = unlist(obs_responses),
-    gauscop = unlist(gauscop_predictions),
+    gauscop_krige = unlist(gauscop_predictions_krige),
+    gauscop_alg = unlist(gauscop_predictions_alg),
     rfsp = unlist(rfsp_predictions),
     ok = unlist(ok_predictions)
 )
 saveRDS(sim.final.df,
         file = "sim_final_df.rds")
 
-list(
-    obs = obs_responses,
-    gauscop = gauscop_predictions,
-    rfsp = rfsp_predictions,
-    ok = ok_predictions
-) -> all.output.data
-str(all.output.data)
+# list(
+#     obs = obs_responses,
+#     gauscop = gauscop_predictions,
+#     rfsp = rfsp_predictions,
+#     ok = ok_predictions
+# ) -> all.output.data
+# 
+# saveRDS(all.output.data,
+#         file = "sim_final_lists.rds")
 
-saveRDS(all.output.data,
-        file = "sim_final_lists.rds")
+summary(gauscop_times)
+summary(ok_times)
+summary(rfsp_times)
 
-rmspe(sim.final.df$gauscop, sim.final.df$obs)
+# RMSPE of the three methods
+rmspe(sim.final.df$gauscop_krige, sim.final.df$obs)
+rmspe(sim.final.df$gauscop_alg, sim.final.df$obs)
 rmspe(sim.final.df$rfsp, sim.final.df$obs)
 rmspe(sim.final.df$ok, sim.final.df$obs)
 
+# Histograms of predictions vs observed values
 par(mfrow=c(2,2))
-hist(sim.final.df$gauscop)
-hist(sim.final.df$ok)
-hist(sim.final.df$rfsp)
-hist(sim.final.df$obs)
+hist(sim.final.df$gauscop_krige,
+     main = "Gaussian Copula (kriging) predictions",
+     breaks = seq(0, 3000, 100),
+     xaxt = 'n')
+hist(sim.final.df$gauscop_alg[sim.final.df$gauscop_alg <= 3000],
+     main = "Gaussian Copula (matrix algebra) predictions",
+     breaks = seq(0, 3000, 100),
+     xaxt = 'n')
+hist(sim.final.df$ok,
+     main = "Ordinary Kriging predictions",
+     breaks = seq(min(sim.final.df$ok), 3000, 100),
+     xaxt = 'n')
+hist(sim.final.df$rfsp,
+     main = "Random forest predictions",
+     breaks = seq(0, 3000, 100),
+     xaxt = 'n')
+# hist(sim.final.df$obs,
+#      main = "Observed values",
+#      breaks = seq(0, max(sim.final.df$obs)+100, 100))
 par(mfrow=c(1,1))
-# 
+
+# How are zeros showing up in the predictions
 sum(sim.final.df$gauscop == 0) / nrow(sim.final.df)
 sum(sim.final.df$obs == 0) / nrow(sim.final.df)
+
+# Let's do some residual plots
+# par(mfrow=c(1,3))
+# plot(x = sim.final.df$obs,
+#      y = (sim.final.df$gauscop - sim.final.df$obs),
+#      main = "Residual plot of Gaussian Copula",
+#      xlab = "Observed Values",
+#      ylab = "Residuals")
+# plot(x = sim.final.df$obs,
+#      y = (sim.final.df$ok - sim.final.df$obs),
+#      main = "Residual plot of Ordinary Kriging",
+#      xlab = "Observed Values",
+#      ylab = "Residuals")
+# plot(x = sim.final.df$obs,
+#      y = (sim.final.df$rfsp - sim.final.df$obs),
+#      main = "Residual plot of Random Forest",
+#      xlab = "Observed Values",
+#      ylab = "Residuals")
+# par(mfrow=c(1,1))
