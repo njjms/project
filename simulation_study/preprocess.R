@@ -40,11 +40,17 @@ cube_root_fix_zeros <- function(data, cube.root.transform = TRUE, correct.zeros 
     data$resp <- data$resp^(1/3)
     }
     zeros <- which(data$resp == 0)
-    epsilon <- min(data$resp[-zeros])
-    Pi <- rep(length(zeros)/nrow(data), nrow(data))
+    if (length(zeros) > 0){
+      epsilon <- min(data$resp[-zeros])
+      Pi <- rep(length(zeros)/nrow(data), nrow(data))
+    } else {
+      # Needs a continuity correction
+      epsilon <- min(data$resp)
+      Pi <- rep(.001, nrow(data))
+    }
     
     if (correct.zeros) {
-    data$resp[zeros] <- runif(length(zeros), 0, epsilon)
+      data$resp[zeros] <- runif(length(zeros), 0, epsilon)
     }
     
     output <- list(transformed_data = data,
@@ -65,4 +71,23 @@ backtransform_gauscop <- function(preds, epsilon) {
 
     preds[preds < epsilon] <- 0
     return(preds^3)
+}
+
+small_preds_to_zeros <- function(preds, epsilon, backtransform=TRUE) {
+  
+  #' Function to transform small predicted values (below a given epsilon) to 0
+  #' 
+  #' @param preds vector of predicted values
+  #' @param epsilon smallest nonzero value in original data
+  #' 
+  #' @return vector of new predicted values
+  
+  if (backtransform) {
+    epsilon <- epsilon^3
+    preds[preds < epsilon] <- 0
+  } else {
+    preds[preds < epsilon] <- 0
+  }
+  
+  return(preds)
 }

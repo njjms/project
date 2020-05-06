@@ -24,15 +24,22 @@ calculate_spatial_params <- function(simdata, testdata, zeros) {
     H <- as.matrix(dist(simdata[,c("x", "y")]))
     
     # Use method of moment estimator for gamma distribution 
-    mu <- mean(simdata$resp[-zeros])
-    beta <- var(simdata$resp[-zeros])/mu
-    mu <- rep(mu, times=nrow(simdata))
+    if (length(zeros) > 0) {
+      mu <- mean(simdata$resp[-zeros])
+      beta <- var(simdata$resp[-zeros])/mu
+      mu <- rep(mu, times=nrow(simdata))
+    } else {
+      mu <- mean(simdata$resp)
+      beta <- var(simdata$resp)/mu
+      mu <- rep(mu, times=nrow(simdata))
+    }
+    
     simdata.cpy <- simdata
     coordinates(simdata.cpy) <- ~x+y
-    
     #Calculate covariance parameters using autofitVariogram
     v_fit <- autofitVariogram(resp~1,
                               input_data = simdata.cpy)
+    
     # v_fit <- tryCatch({
     #     autofitVariogram(resp~1,
     #                      input_data = simdata)

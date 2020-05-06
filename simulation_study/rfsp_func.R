@@ -78,8 +78,8 @@ calculate_rfsp_predictions_rasterpd <- function(training_data, test_points, num.
     test_points <- SpatialPointsDataFrame(test_points[,c("x", "y")], data.frame(resp = test_points[,c("resp")]))
     train_distances <- data.frame(pointDistance(training_points, lonlat = FALSE))
     test_distances <- data.frame(pointDistance(test_points, training_points, lonlat = FALSE))
-    colnames(train_distances) <- paste0("layer.", 1:300)
-    colnames(test_distances) <- paste0("layer.", 1:300)
+    colnames(train_distances) <- paste0("layer.", 1:nrow(training_data))
+    colnames(test_distances) <- paste0("layer.", 1:nrow(training_data))
     
     dn0 <- paste(names(train_distances), collapse="+") 
     fm0 <- as.formula(paste("resp ~ ", dn0))   

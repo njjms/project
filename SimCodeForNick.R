@@ -58,12 +58,16 @@ source("ZIGFunctions.R") # Functions for zero-inflated gamma.
 # Fit a variogram to that. Without covariates, the Gaussian copula model fits,
 # but the exponential and spherical don't.
 Nresp_df <- data.frame(x=dat$x,y=dat$y,
+                       annpre = dat$annpre,
                        z=qnorm(pzig(resp,mu,beta,epsilon,Pi)))
 require(gstat)
-emp_var<-variogram(z~1,loc=~x+y,Nresp_df)
-plot(emp_var)
+emp_var<-variogram(z~annpre,loc=~x+y,Nresp_df)
+plot(emp_var,
+     main = "Variogram with annual precipitation factored in")
 v_fit<-fit.variogram(emp_var,vgm(psill=.6,"Gau",range=80000,nugget=.6))
-plot(emp_var,v_fit)
+plot(emp_var,v_fit,
+  main = "Variogram with annual precipitation effect factored in")
+
 v_fit
 
 names(v_fit)

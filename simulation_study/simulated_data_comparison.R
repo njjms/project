@@ -20,7 +20,7 @@ alb.xy <- project(with(dat,cbind(lon_fuzzed,lat_fuzzed)),
 colnames(alb.xy) <- c("x","y")
 dat <- cbind(alb.xy,dat)
 
-train.n <- 300
+train.n <- 200
 sim.sets.n <- 1000
 
 obs_responses <- vector(mode = "list",
@@ -29,13 +29,23 @@ gauscop_predictions_alg <- vector(mode = "list",
                               length =sim.sets.n)
 gauscop_predictions_krige <- vector(mode = "list",
                               length =sim.sets.n)
-rfsp_predictions <- vector(mode = "list",
+rfsp_predictions150 <- vector(mode = "list",
+                          length = sim.sets.n)
+rfsp_predictions100 <- vector(mode = "list",
+                          length = sim.sets.n)
+rfsp_predictions50 <- vector(mode = "list",
                           length = sim.sets.n)
 ok_predictions <- vector(mode = "list",
                          length = sim.sets.n)
+rfsp_predictions_tr0 <- vector(mode = "list",
+                          length = sim.sets.n)
+ok_predictions_tr0 <- vector(mode = "list",
+                         length = sim.sets.n)
 
 gauscop_times <- vector(mode = "numeric", length = sim.sets.n)
-rfsp_times <- vector(mode = "numeric", length = sim.sets.n)
+rfsp_times150 <- vector(mode = "numeric", length = sim.sets.n)
+rfsp_times100 <- vector(mode = "numeric", length = sim.sets.n)
+rfsp_times50 <- vector(mode = "numeric", length = sim.sets.n)
 ok_times <- vector(mode = "numeric", length = sim.sets.n)
 
 epsilons <- vector(mode = "numeric", length = sim.sets.n)
@@ -51,23 +61,20 @@ for (i in 1:sim.sets.n) {
         resp = simdata[i,]
     )
     
-    theta <- NULL
-    rfsp_model <- NULL
-    
     tmp <- split_data(full_simdata, n = train.n)
     
-    # Create spatial random forest model
-    rfsp_start <- Sys.time()
-    rfsp_model <- calculate_rfsp_predictions_rasterpd(training_data = tmp$train, test_points = tmp$test)
-    rfsp_time <- Sys.time() - rfsp_start
+    # Create spatial random forest models
+    rfsp_start150 <- Sys.time()
+    rfsp_model150 <- calculate_rfsp_predictions_rasterpd(training_data = tmp$train, test_points = tmp$test)
+    rfsp_time150 <- Sys.time() - rfsp_start150
     
-    # while(is.null(rfsp_model)){
-    #     tmp <- split_data(full_simdata, n = train.n)
-    #     try(
-    #         calculate_rfsp_predictions(training_data = tmp$train,
-    #                                    test_points = tmp$test) -> rfsp_model
-    #     )
-    # }
+    rfsp_start100 <- Sys.time()
+    rfsp_model100 <- calculate_rfsp_predictions_rasterpd(training_data = tmp$train, test_points = tmp$test, num.trees = 100)
+    rfsp_time100 <- Sys.time() - rfsp_start100
+    
+    rfsp_start50 <- Sys.time()
+    rfsp_model50 <- calculate_rfsp_predictions_rasterpd(training_data = tmp$train, test_points = tmp$test, num.trees = 50)
+    rfsp_time50 <- Sys.time() - rfsp_start50
     
     # Create spatial Gaussian copula model
     gauscop_start <- Sys.time()
@@ -84,6 +91,8 @@ for (i in 1:sim.sets.n) {
                        Pi = transformed.training.set$Pi,
                        training_data = tmp$train,
                        test_data = tmp$test) -> zhat.zigs.df.krige
+    gauscop_time <- Sys.time() - gauscop_start
+    
     calculate_zhat_gauscop(resp = transformed.training.set$transformed_data$resp,
                            mu = theta$mu,
                            beta = theta$beta,
@@ -94,7 +103,6 @@ for (i in 1:sim.sets.n) {
     
     yhat_gauscop_krige <- backtransform_gauscop(zhat.zigs.df.krige$zigs, transformed.training.set$epsilon)
     yhat_gauscop_alg <- backtransform_gauscop(zhat.zigs.df.alg$zigs, transformed.training.set$epsilon)
-    gauscop_time <- Sys.time() - gauscop_start
     
     # Create ordinary kriging model
     ok_start <- Sys.time()
@@ -109,11 +117,17 @@ for (i in 1:sim.sets.n) {
     obs_responses[[i]] <- tmp$test$resp
     gauscop_predictions_alg[[i]] <- yhat_gauscop_alg
     gauscop_predictions_krige[[i]] <- yhat_gauscop_krige
-    rfsp_predictions[[i]] <- rfsp_model$predictions
+    rfsp_predictions150[[i]] <- rfsp_model150$predictions
+    rfsp_predictions100[[i]] <- rfsp_model100$predictions
+    rfsp_predictions50[[i]] <- rfsp_model50$predictions
     ok_predictions[[i]] <- ak_model$krige_output$var1.pred
+    rfsp_predictions_tr0[[i]] <- small_preds_to_zeros(rfsp_model150$predictions, transformed.training.set$epsilon)
+    ok_predictions_tr0[[i]] <- small_preds_to_zeros(ak_model$krige_output$var1.pred, transformed.training.set$epsilon)
     
     gauscop_times[i] <- gauscop_time
-    rfsp_times[i] <- rfsp_time
+    rfsp_times150[i] <- rfsp_time150
+    rfsp_times100[i] <- rfsp_time100
+    rfsp_times50[i] <- rfsp_time50
     ok_times[i] <- ok_time
     
     print(paste0("Completed set: ", toString(i)))
@@ -125,8 +139,12 @@ sim.final.df <- data.frame(
     obs = unlist(obs_responses),
     gauscop_krige = unlist(gauscop_predictions_krige),
     gauscop_alg = unlist(gauscop_predictions_alg),
-    rfsp = unlist(rfsp_predictions),
-    ok = unlist(ok_predictions)
+    rfsp150 = unlist(rfsp_predictions150),
+    rfsp100 = unlist(rfsp_predictions100),
+    rfsp50 = unlist(rfsp_predictions50),
+    ok = unlist(ok_predictions),
+    rfsp_tr0 = unlist(rfsp_predictions_tr0),
+    ok_tr0 = unlist(ok_predictions_tr0)
 )
 saveRDS(sim.final.df,
         file = "sim_final_df.rds")
@@ -143,39 +161,46 @@ saveRDS(sim.final.df,
 
 summary(gauscop_times)
 summary(ok_times)
-summary(rfsp_times)
+summary(rfsp_times150)
+summary(rfsp_times100)
+summary(rfsp_times50)
 
 # RMSPE of the three methods
 rmspe(sim.final.df$gauscop_krige, sim.final.df$obs)
 rmspe(sim.final.df$gauscop_alg, sim.final.df$obs)
-rmspe(sim.final.df$rfsp, sim.final.df$obs)
+rmspe(sim.final.df$rfsp150, sim.final.df$obs)
+rmspe(sim.final.df$rfsp100, sim.final.df$obs)
+rmspe(sim.final.df$rfsp50, sim.final.df$obs)
 rmspe(sim.final.df$ok, sim.final.df$obs)
+rmspe(sim.final.df$rfsp_tr0, sim.final.df$obs)
+rmspe(sim.final.df$ok_tr0, sim.final.df$obs)
 
 # Histograms of predictions vs observed values
-par(mfrow=c(2,2))
-hist(sim.final.df$gauscop_krige,
-     main = "Gaussian Copula (kriging) predictions",
-     breaks = seq(0, 3000, 100),
-     xaxt = 'n')
-hist(sim.final.df$gauscop_alg[sim.final.df$gauscop_alg <= 3000],
-     main = "Gaussian Copula (matrix algebra) predictions",
-     breaks = seq(0, 3000, 100),
-     xaxt = 'n')
-hist(sim.final.df$ok,
-     main = "Ordinary Kriging predictions",
-     breaks = seq(min(sim.final.df$ok), 3000, 100),
-     xaxt = 'n')
-hist(sim.final.df$rfsp,
-     main = "Random forest predictions",
-     breaks = seq(0, 3000, 100),
-     xaxt = 'n')
+# par(mfrow=c(2,2))
+# hist(sim.final.df$gauscop_krige,
+#      main = "Gaussian Copula (kriging) predictions",
+#      breaks = seq(0, 3000, 100),
+#      xaxt = 'n')
+# hist(sim.final.df$gauscop_alg[sim.final.df$gauscop_alg <= 3000],
+#      main = "Gaussian Copula (matrix algebra) predictions",
+#      breaks = seq(0, 3000, 100),
+#      xaxt = 'n')
+# hist(sim.final.df$ok,
+#      main = "Ordinary Kriging predictions",
+#      breaks = seq(min(sim.final.df$ok), 3000, 100),
+#      xaxt = 'n')
+# hist(sim.final.df$rfsp150,
+#      main = "Random forest predictions",
+#      breaks = seq(0, 3000, 100),
+#      xaxt = 'n')
 # hist(sim.final.df$obs,
 #      main = "Observed values",
 #      breaks = seq(0, max(sim.final.df$obs)+100, 100))
-par(mfrow=c(1,1))
+# par(mfrow=c(1,1))
 
 # How are zeros showing up in the predictions
 sum(sim.final.df$gauscop == 0) / nrow(sim.final.df)
+sum(sim.final.df$rfsp_tr0 == 0) / nrow(sim.final.df)
 sum(sim.final.df$obs == 0) / nrow(sim.final.df)
 
 # Let's do some residual plots
