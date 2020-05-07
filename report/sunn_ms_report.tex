@@ -252,6 +252,17 @@ $$
 RMSPE = \sqrt{\frac{1}{mR} \sum_{r=1}^R \sum_{j=1}^m (\hat{y}_{j|r} - y_{j|r})^2}
 $$
 
+We can also examine the \textit{signed relative bias} of each pointwise prediction method using the following formula\cite{verhoef13}
+
+$$
+SRB = \text{sign}(\tau} \sqrt{\frac{\tau^2}{MSPE - \tau^2}}
+$$
+
+where $\tau = \frac{1}{mR} \sum_{r = 1}^R \sum_{j = 1}^m (\hat{y}_{j|r} - y_{j|r})$.
+This formula derives from the fact that mean squared prediction error is equal to the bias of the estimate squared plus the variance of the estimate.
+While bias itself does not tell us much, bias as a ratio of MSE allows us to investigate the error for different prediction methods deeper than MSE alone.
+A smaller absolute value of SRB means smaller bias in the method with a negative value indicating underprediction and a positive value indicating overprediction.
+
 \subsection{RMSPE}
 \begin{center}
 \begin{tabular}{|| c | c c c c c c c ||}
