@@ -63,9 +63,9 @@ We then randomly sample 300 points from each of the simulated datasets to use as
 Afterwards, the models predictive capabilities are tested on the remaining 924 test points.
 
 It was difficult to also simulate the covariates which preserve the original relationships between the covariates and the responses, therefore, only the responses were simulated for this study.
-The Gaussian copula and the random forests will be used solely then on the geographic locations of the data points and the values at each of hte simulated points.
+The Gaussian copula and the random forests will be used solely then on the geographic locations of the data points and the values at each of the simulated points.
 
-\paragraph{Resampled Data} Again using the original forestry dataset, we obtain \textit{$m_2$ = 1000} resampled datasets of size \textit{n = 200} by sampling rows without replacement from the data and treating that as the training data.
+\paragraph{Resampled Data} Again using the original forestry dataset, we obtain \textit{$m_2$ = 1000} resampled datasets of size \textit{n = 300} by sampling rows without replacement from the data and treating that as the training data.
 We then compare the performance of the trained models in predicting the values of the remaining 1024 points.
 \vspace{.5cm}
 
@@ -251,11 +251,12 @@ The metric of interest will be root mean square prediction error (RMSPE), define
 $$
 RMSPE = \sqrt{\frac{1}{mR} \sum_{r=1}^R \sum_{j=1}^m (\hat{y}_{j|r} - y_{j|r})^2}
 $$
+where $r \in R$ is a simulated dataset and $j|r$ signifies the prediction for observation $j$ in the dataset $r$.
 
-We can also examine the \textit{signed relative bias} of each pointwise prediction method using the following formula\cite{verhoef13}
+We will also examine the \textit{signed relative bias} of each pointwise prediction method using the following formula\cite{verhoef13}
 
 $$
-SRB = \text{sign}(\tau} \sqrt{\frac{\tau^2}{MSPE - \tau^2}}
+SRB = \text{sign}(\tau) \sqrt{\frac{\tau^2}{MSPE - \tau^2}}
 $$
 
 where $\tau = \frac{1}{mR} \sum_{r = 1}^R \sum_{j = 1}^m (\hat{y}_{j|r} - y_{j|r})$.
@@ -263,12 +264,20 @@ This formula derives from the fact that mean squared prediction error is equal t
 While bias itself does not tell us much, bias as a ratio of MSE allows us to investigate the error for different prediction methods deeper than MSE alone.
 A smaller absolute value of SRB means smaller bias in the method with a negative value indicating underprediction and a positive value indicating overprediction.
 
+Lastly, we will examine the 90\% \textit{prediction interval coverage} for each of the methods, defined as
+
+\begin{align*}
+	PIC90 = \frac{1}{mR} \sum_{r=1}^R \sum_{j=1}^m I\left(\hat{y}_{j|r} - 1.645\hat{\text{se}}(\hat{y_{j|r}}) < y_{j|r} \cap \hat{y}_{j|r} + 1.645\hat{\text{se}}(\hat{y_{j|r}})\right)
+\end{align*}
+
 \subsection{RMSPE}
 \begin{center}
 \begin{tabular}{|| c | c c c c c c c ||}
 \hline
 $n$ & Copula & Kriging & $RFsp_{150}$ & $RFsp_{100}$ & $RFsp_{50}$ & $RFsp_{150}(zeros)$ & Kriging (zeros) \\ [.5ex] 
 \hline\hline
+	$1000$ & 264.614 & 248.749 & 256.095 & 256.304 & 257.337 & 256.116 & 248.721 \\
+	$500$ & 254.933 & 243.617 & 253.945 & 254.267 & 255.217 & 253.957 & 243.604 \\
 	$300$ & 264.614 & 248.749 & 256.095 & 256.304 & 257.337 & 256.116 & 248.721 \\
 	$200$ & 275.154 & 253.674 & 258.074 & 258.246 & 259.417 & 258.113 & 253.628 \\
 	$100$ & 298.042 & 268.752 & 266.179 & 266.376 & 267.221 & 266.260 & 268.717 \\ [.5ex] 
@@ -279,9 +288,24 @@ $n$ & Copula & Kriging & $RFsp_{150}$ & $RFsp_{100}$ & $RFsp_{50}$ & $RFsp_{150}
 Our copula model had between 5\% and 10\% higher RMSPE than the kriging or random forest models, although these results suggest that the difference grows smaller as $n$ increases.
 Kriging had the best prediction performance for most sample sizes except for $n = 100$, but random forests usually had relatively close error metrics.
 
+\subsection{Signed Relative Bias}
+\begin{center}
+\begin{tabular}{|| c | c c c c c c c ||}
+\hline
+$n$ & Copula & Kriging & $RFsp_{150}$ & $RFsp_{100}$ & $RFsp_{50}$ & $RFsp_{150}(zeros)$ & Kriging (zeros) \\ [.5ex] 
+\hline\hline
+	$1000$ & 248.849 & 240.551 & 251.67 & 251.900 & 252.947 & 251.684 & 240.541 \\
+	$500$ & 254.933 & 243.617 & 253.945 & 254.267 & 255.217 & 253.957 & 243.604 \\
+	$300$ & 264.614 & 248.749 & 256.095 & 256.304 & 257.337 & 256.116 & 248.721 \\
+	$200$ & 275.154 & 253.674 & 258.074 & 258.246 & 259.417 & 258.113 & 253.628 \\
+	$100$ & 298.042 & 268.752 & 266.179 & 266.376 & 267.221 & 266.260 & 268.717 \\ [.5ex] 
+\hline
+\end{tabular}
+\end{center}
+
 \subsection{Residual analysis}
 
-We can plot the prediction error from all 1000 simulations.
+We can plot the prediction error from all 1000 simulated datasets.
 
 \begin{center}
 \includegraphics[scale=.7]{residual_plots}

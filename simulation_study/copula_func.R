@@ -133,7 +133,11 @@ krige_zhat_gauscop <- function(training_data, test_data, resp, mu, beta, epsilon
                   beta = beta,
                   epsilon = epsilon,
                   Pi = Pi))
-  zhat <- ord_kriging_z(training_data = training_data, test_points = test_data, test_z = z)$krige_output$var1.pred
+  if (sum(duplicated(z)) == (length(z)-1)) {
+    zhat <- rep(z[1], nrow(test_data))
+  } else {
+    zhat <- ord_kriging_z(training_data = training_data, test_points = test_data, test_z = z)$krige_output$var1.pred
+  }
   
   pz <- pnorm(zhat)
   pz[which(pz==1)] <- 1-.Machine$double.eps

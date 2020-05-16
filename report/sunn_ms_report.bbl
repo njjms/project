@@ -69,6 +69,31 @@
       \field{volume}{45}
       \field{year}{2001}
     \endentry
+    \entry{verhoef13}{article}{}
+      \name{author}{1}{}{%
+        {{hash=eb514ecb7f3cd3102b5b2e1a9ce3ca39}{%
+           family={Jay\bibnamedelimb M.\bibnamedelimi Ver\bibnamedelima Hoef},
+           familyi={J\bibinitperiod\bibinitdelim M\bibinitperiod\bibinitdelim V\bibinitperiod\bibinitdelim H\bibinitperiod},
+           given={Hailemariam\bibnamedelima Temesgen},
+           giveni={H\bibinitperiod\bibinitdelim T\bibinitperiod}}}%
+      }
+      \strng{namehash}{eb514ecb7f3cd3102b5b2e1a9ce3ca39}
+      \strng{fullhash}{eb514ecb7f3cd3102b5b2e1a9ce3ca39}
+      \strng{bibnamehash}{eb514ecb7f3cd3102b5b2e1a9ce3ca39}
+      \strng{authorbibnamehash}{eb514ecb7f3cd3102b5b2e1a9ce3ca39}
+      \strng{authornamehash}{eb514ecb7f3cd3102b5b2e1a9ce3ca39}
+      \strng{authorfullhash}{eb514ecb7f3cd3102b5b2e1a9ce3ca39}
+      \field{sortinit}{J}
+      \field{sortinithash}{fce5f8d0bd05e8d93f3dbe21c78897ca}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{PLoS ONE}
+      \field{title}{A Comparison of the Spatial Linear Model to Nearest Neighbor (k-NN) Methods for Forestry Applications}
+      \field{year}{2013}
+      \verb{doi}
+      \verb https://doi.org/10.1371/journal.pone.0059129
+      \endverb
+    \endentry
     \entry{duan17}{article}{}
       \name{author}{1}{}{%
         {{hash=03a8959a949958edf2adbafc9ede3ebf}{%
