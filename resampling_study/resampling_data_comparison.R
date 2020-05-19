@@ -130,7 +130,8 @@ for (i in 1:sim.sets.n) {
     print(paste0("Completed set: ", toString(i)))
 }
 
-Sys.time() - start
+runtime <- Sys.time() - start
+runtime
 
 sim.final.df <- data.frame(
     obs = unlist(obs_responses),
@@ -186,20 +187,20 @@ mean(pic90s_rfsp)
 mean(pic90s_uk)
 
 # Histograms of predictions vs observed values
-par(mfrow=c(2,2))
-hist(sim.final.df$gauscop_krige,
-     main = "Gaussian Copula (kriging) predictions",
-     breaks = seq(0, 3000, 100))
-hist(sim.final.df$uk,
-     main = "Universal Kriging predictions",
-     breaks = seq(min(sim.final.df$uk), 3000, 100))
-hist(sim.final.df$rfsp150,
-     main = "Random forest predictions",
-     breaks = seq(0, 3000, 100))
-hist(sim.final.df$obs,
-     main = "Observed values",
-     breaks = seq(0, max(sim.final.df$obs)+100, 100))
-par(mfrow=c(1,1))
+# par(mfrow=c(2,2))
+# hist(sim.final.df$gauscop_krige,
+#      main = "Gaussian Copula (kriging) predictions",
+#      breaks = seq(0, 3000, 100))
+# hist(sim.final.df$uk,
+#      main = "Universal Kriging predictions",
+#      breaks = seq(min(sim.final.df$uk), 3000, 100))
+# hist(sim.final.df$rfsp150,
+#      main = "Random forest predictions",
+#      breaks = seq(0, 3000, 100))
+# hist(sim.final.df$obs,
+#      main = "Observed values",
+#      breaks = seq(0, max(sim.final.df$obs)+100, 100))
+# par(mfrow=c(1,1))
 
 # How are zeros showing up in the predictions
 sum(sim.final.df$gauscop == 0) / nrow(sim.final.df)
@@ -207,20 +208,67 @@ sum(sim.final.df$rfsp_tr0 == 0) / nrow(sim.final.df)
 sum(sim.final.df$obs == 0) / nrow(sim.final.df)
 
 # Let's do some residual plots
-par(mfrow=c(1,3))
-plot(x = sim.final.df$obs,
-     y = (sim.final.df$gauscop - sim.final.df$obs),
-     main = "Residual plot of Gaussian Copula",
-     xlab = "Observed Values",
-     ylab = "Residuals")
-plot(x = sim.final.df$obs,
-     y = (sim.final.df$uk - sim.final.df$obs),
-     main = "Residual plot of Universal Kriging",
-     xlab = "Observed Values",
-     ylab = "Residuals")
-plot(x = sim.final.df$obs,
-     y = (sim.final.df$rfsp150 - sim.final.df$obs),
-     main = "Residual plot of Random Forest",
-     xlab = "Observed Values",
-     ylab = "Residuals")
-par(mfrow=c(1,1))
+# par(mfrow=c(1,3))
+# plot(x = sim.final.df$obs,
+#      y = (sim.final.df$gauscop - sim.final.df$obs),
+#      ylim = c(min((sim.final.df$gauscop - sim.final.df$obs)), max((sim.final.df$gauscop - sim.final.df$obs))),
+#      main = "Residual plot of Gaussian Copula",
+#      xlab = "Observed Values",
+#      ylab = "Residuals")
+# plot(x = sim.final.df$obs,
+#      y = (sim.final.df$uk - sim.final.df$obs),
+#      ylim = c(min((sim.final.df$gauscop - sim.final.df$obs)), max((sim.final.df$gauscop - sim.final.df$obs))),
+#      main = "Residual plot of Universal Kriging",
+#      xlab = "Observed Values",
+#      ylab = "Residuals")
+# plot(x = sim.final.df$obs,
+#      y = (sim.final.df$rfsp150 - sim.final.df$obs),
+#      ylim = c(min((sim.final.df$gauscop - sim.final.df$obs)), max((sim.final.df$gauscop - sim.final.df$obs))),
+#      main = "Residual plot of Random Forest",
+#      xlab = "Observed Values",
+#      ylab = "Residuals")
+# par(mfrow=c(1,1))
+
+# resids <- data.frame(obs = sim.final.df$obs,
+#                      cop_res = (sim.final.df$gauscop_krige - sim.final.df$obs),
+#                      rfsp_res = (sim.final.df$rfsp150 - sim.final.df$obs),
+#                      ok_res = (sim.final.df$ok - sim.final.df$obs))
+# 
+# ggplot(resids) +
+#     geom_point(mapping = aes(x = obs, y= cop_res),
+#                color ="#013d09", alpha = .2) +
+#     geom_line(mapping = aes(x = obs, y = -obs),
+#               linetype = 2, color = "black") +
+#     labs(
+#         title = "Copula Residuals",
+#         x = element_blank(),
+#         y = "Residuals"
+#     ) +
+#     theme_minimal() -> g1
+# 
+# ggplot(resids) +
+#     geom_point(mapping = aes(x = obs, y= rfsp_res),
+#                color ="#013d09", alpha = .2) +
+#     geom_line(mapping = aes(x = obs, y = -obs),
+#               linetype = 2, color = "black") +
+#     labs(
+#         title = "RFsp Residuals",
+#         x = element_blank(),
+#         y = element_blank()
+#     ) +
+#     theme_minimal() -> g2
+# 
+# ggplot(resids) +
+#     geom_point(mapping = aes(x = obs, y= ok_res),
+#                color ="#013d09", alpha = .2) +
+#     geom_line(mapping = aes(x = obs, y = -obs),
+#               linetype = 2, color = "black") +
+#     labs(
+#         title = "Kriging Residuals",
+#         x = element_blank(),
+#         y = element_blank()
+#     ) +
+#     theme_minimal() -> g3
+# 
+# grid.arrange(g1, g2, g3, nrow = 1,
+#              bottom = textGrob("Observed Values"))

@@ -1928,12 +1928,16 @@
     <bcf:citekey order="3">hengl18</bcf:citekey>
     <bcf:citekey order="4">madsen09</bcf:citekey>
     <bcf:citekey order="5">raynolds16</bcf:citekey>
-    <bcf:citekey order="6">gaynanova18</bcf:citekey>
-    <bcf:citekey order="7">duan17</bcf:citekey>
-    <bcf:citekey order="8">madsen09</bcf:citekey>
-    <bcf:citekey order="9">breiman01</bcf:citekey>
-    <bcf:citekey order="10">hengl18</bcf:citekey>
-    <bcf:citekey order="11">verhoef13</bcf:citekey>
+    <bcf:citekey order="6">madsen09</bcf:citekey>
+    <bcf:citekey order="7">kis15</bcf:citekey>
+    <bcf:citekey order="8">gaynanova18</bcf:citekey>
+    <bcf:citekey order="9">duan17</bcf:citekey>
+    <bcf:citekey order="10">madsen09</bcf:citekey>
+    <bcf:citekey order="11">breiman01</bcf:citekey>
+    <bcf:citekey order="12">hengl18</bcf:citekey>
+    <bcf:citekey order="13">hengl18</bcf:citekey>
+    <bcf:citekey order="14">verhoef13</bcf:citekey>
+    <bcf:citekey order="15">verhoef13</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nty">

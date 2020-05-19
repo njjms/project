@@ -47,7 +47,7 @@ calculate_glm_params <- function(data, cube.root.transform = TRUE, correct.zeros
     zeros <- ifelse(data$resp == 0, 1, 0)
     X <- matrix(cbind(rep(1, nrow(data)),
                       data$annpre),
-                nrow = 300)
+                nrow = nrow(data))
     epsilon <- min(data$resp[data$resp != 0])
     
     if (sum(zeros) > 0) {

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.5.4)  13 MAY 2020 23:05
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.5.4)  19 MAY 2020 02:12
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -514,50 +514,62 @@ Package biblatex Info: Reference segment=0 on input line 17.
 File: ./images/raw_histograms.png Graphic file (type png)
 <use ./images/raw_histograms.png>
 Package pdftex.def Info: ./images/raw_histograms.png  used on input line 50.
-(pdftex.def)             Requested size: 178.5092pt x 136.73961pt.
+(pdftex.def)             Requested size: 225.4804pt x 172.72372pt.
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-<./images/total_timber_map.png, id=19, 534.49687pt x 398.99063pt>
-File: ./images/total_timber_map.png Graphic file (type png)
-<use ./images/total_timber_map.png>
-Package pdftex.def Info: ./images/total_timber_map.png  used on input line 73.
-(pdftex.def)             Requested size: 211.38832pt x 157.79742pt.
+<./images/timber_annpre.png, id=19, 602.25pt x 268.00125pt>
+File: ./images/timber_annpre.png Graphic file (type png)
+<use ./images/timber_annpre.png>
+Package pdftex.def Info: ./images/timber_annpre.png  used on input line 77.
+(pdftex.def)             Requested size: 469.75502pt x 209.0483pt.
 <./images/semivariogram_annpre.png, id=20, 526.96875pt x 376.40625pt>
 File: ./images/semivariogram_annpre.png Graphic file (type png)
 <use ./images/semivariogram_annpre.png>
-Package pdftex.def Info: ./images/semivariogram_annpre.png  used on input line 76.
-(pdftex.def)             Requested size: 211.38832pt x 150.99059pt.
- [2 <./images/raw_histograms.png> <./images/total_timber_map.png (PNG copy)> <./images/semivariogram_annpre.png>]
+Package pdftex.def Info: ./images/semivariogram_annpre.png  used on input line 83.
+(pdftex.def)             Requested size: 187.89914pt x 134.21385pt.
+ [2 <./images/raw_histograms.png> <./images/semivariogram_annpre.png>]
 <./images/semivariogram_example.png, id=27, 451.6875pt x 301.125pt>
 File: ./images/semivariogram_example.png Graphic file (type png)
 <use ./images/semivariogram_example.png>
-Package pdftex.def Info: ./images/semivariogram_example.png  used on input line 113.
+Package pdftex.def Info: ./images/semivariogram_example.png  used on input line 125.
 (pdftex.def)             Requested size: 225.84319pt x 150.56212pt.
- [3 <./images/semivariogram_example.png>] [4] [5]
-<./images/residual_plots.png, id=43, 565.36218pt x 284.56313pt>
+ [3 <./images/timber_annpre.png (PNG copy)>] [4 <./images/semivariogram_example.png>] [5] [6] [7]
+<./images/residual_plots.png, id=50, 564.60938pt x 268.00125pt>
 File: ./images/residual_plots.png Graphic file (type png)
 <use ./images/residual_plots.png>
-Package pdftex.def Info: ./images/residual_plots.png  used on input line 294.
-(pdftex.def)             Requested size: 395.75082pt x 199.19283pt.
- [6] [7 <./images/residual_plots.png>] (./sunn_ms_report.aux)
+Package pdftex.def Info: ./images/residual_plots.png  used on input line 368.
+(pdftex.def)             Requested size: 395.22386pt x 187.59958pt.
+ [8 <./images/residual_plots.png>]
+<./images/tshevol_residual_plots.png, id=55, 564.60938pt x 268.00125pt>
+File: ./images/tshevol_residual_plots.png Graphic file (type png)
+<use ./images/tshevol_residual_plots.png>
+Package pdftex.def Info: ./images/tshevol_residual_plots.png  used on input line 428.
+(pdftex.def)             Requested size: 395.22386pt x 187.59958pt.
+ [9 <./images/tshevol_residual_plots.png>]
+<./images/resampling_residual_plots.png, id=60, 564.60938pt x 268.00125pt>
+File: ./images/resampling_residual_plots.png Graphic file (type png)
+<use ./images/resampling_residual_plots.png>
+Package pdftex.def Info: ./images/resampling_residual_plots.png  used on input line 487.
+(pdftex.def)             Requested size: 395.22386pt x 187.59958pt.
+ [10] [11 <./images/resampling_residual_plots.png>] [12] (./sunn_ms_report.aux)
 Package logreq Info: Writing requests to 'sunn_ms_report.run.xml'.
 \openout1 = `sunn_ms_report.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 11246 strings out of 494847
- 192989 string characters out of 6179081
- 606251 words of memory out of 5000000
- 14455 multiletter control sequences out of 15000+600000
+ 11258 strings out of 494847
+ 193434 string characters out of 6179081
+ 612317 words of memory out of 5000000
+ 14465 multiletter control sequences out of 15000+600000
  10445 words of font info for 38 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
- 45i,16n,45p,836b,1148s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 45i,16n,45p,836b,1150s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on sunn_ms_report.pdf (7 pages, 354426 bytes).
+Output written on sunn_ms_report.pdf (12 pages, 407928 bytes).
 PDF statistics:
- 113 PDF objects out of 1000 (max. 8388607)
- 75 compressed objects within 1 object stream
+ 132 PDF objects out of 1000 (max. 8388607)
+ 85 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 26 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 36 words of extra memory for PDF output out of 10000 (max. 10000000)
 

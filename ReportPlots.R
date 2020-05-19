@@ -2,6 +2,7 @@ dat <- read.csv("ForestDataFuzzed.csv")
 str(dat)
 
 library(rgdal)
+library(gridExtra)
 alb.xy <- project(with(dat,cbind(lon_fuzzed,lat_fuzzed)),
                   "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs")
 colnames(alb.xy) <- c("x","y")
@@ -40,13 +41,11 @@ ggplot(dat, aes(x=x/1000,y=y/1000)) +
                shape = 21,
                color = "black"
                ) +
-    geom_density_2d(mapping = aes(z = annpre),
-                    color = "red") +
     scale_color_gradient(low = "white", high = "#013d09") +
     scale_x_continuous(breaks = round(seq(-2150, -2000, by = 50),2)) +
     labs(
-        title = "Total Timber Volume in Sampled Plots, Northwest Oregon",
-        subtitle = "with Contour Mapping of Annual Precipitation",
+        title = "Total Timber Volume in Sampled Plots",
+        subtitle = "Northwest Oregon",
         caption = "Projection: Alber's Equal Area Conic",
         x = "X (kilometers)",
         y = "Y (kilometers)",
@@ -57,9 +56,32 @@ ggplot(dat, aes(x=x/1000,y=y/1000)) +
         panel.background = element_rect(fill = 'white'),
         panel.grid = element_line(color = "grey", size = .1),
         plot.caption = element_text(hjust = 0, face = "italic")
-    )
+    ) -> g1
 
-library(gridExtra)
+ggplot(dat, aes(x=x/1000,y=y/1000)) +
+    geom_point(mapping = aes(color = annpre),
+               size=2) +
+    geom_point(stroke=1,
+               shape = 21,
+               color = "black"
+               ) +
+    scale_color_gradient(low = "white", high = "#013d09") +
+    scale_x_continuous(breaks = round(seq(-2150, -2000, by = 50),2)) +
+    labs(
+        title = "Annual Precipitation in Sampled Plots",
+        subtitle = "Northwest Oregon",
+        x = "X (kilometers)",
+        y = "Y (kilometers)",
+        color = "Total Volume"
+    ) +
+    theme(
+        axis.text.x=element_text(angle=90,hjust=1),
+        panel.background = element_rect(fill = 'white'),
+        panel.grid = element_line(color = "grey", size = .1),
+        plot.caption = element_text(hjust = 0, face = "italic")
+    ) -> g2
+
+grid.arrange(g1, g2, nrow =1)
 
 ggplot(dat, aes(x = totvol)) +
     geom_histogram(fill = "#49ad57", color = "black",

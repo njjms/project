@@ -1,5 +1,5 @@
 setwd("~/MS_Project/simulation_study/")
-simdata <- readRDS("../simulated_Y.rds")
+# simdata <- readRDS("../simulated_Y.rds")
 simdata <- readRDS("../simulated_tshevol.rds")
 dat <- read.csv("../ForestDataFuzzed.csv")
 
@@ -21,7 +21,7 @@ alb.xy <- project(with(dat,cbind(lon_fuzzed,lat_fuzzed)),
 colnames(alb.xy) <- c("x","y")
 dat <- cbind(alb.xy,dat)
 
-train.n <- 100
+train.n <- 300
 sim.sets.n <- 1000
 
 obs_responses <- vector(mode = "list",length = sim.sets.n)
@@ -240,3 +240,47 @@ mean(pic90s_ok[!is.na(pic90s_ok)])
 #      xlab = "Observed Values",
 #      ylab = "Residuals")
 # par(mfrow=c(1,1))
+
+resids <- data.frame(obs = sim.final.df$obs,
+                     cop_res = (sim.final.df$gauscop_krige - sim.final.df$obs),
+                     rfsp_res = (sim.final.df$rfsp150 - sim.final.df$obs),
+                     ok_res = (sim.final.df$ok - sim.final.df$obs))
+
+ggplot(resids) +
+    geom_point(mapping = aes(x = obs, y= cop_res),
+               color ="#013d09", alpha = .2) +
+    geom_line(mapping = aes(x = obs, y = -obs),
+              linetype = 2, color = "black") +
+    labs(
+        title = "Copula Residuals",
+        x = element_blank(),
+        y = "Residuals"
+    ) +
+    theme_minimal() -> g1
+
+ggplot(resids) +
+    geom_point(mapping = aes(x = obs, y= rfsp_res),
+               color ="#013d09", alpha = .2) +
+    geom_line(mapping = aes(x = obs, y = -obs),
+              linetype = 2, color = "black") +
+    labs(
+        title = "RFsp Residuals",
+        x = element_blank(),
+        y = element_blank()
+    ) +
+    theme_minimal() -> g2
+
+ggplot(resids) +
+    geom_point(mapping = aes(x = obs, y= ok_res),
+               color ="#013d09", alpha = .2) +
+    geom_line(mapping = aes(x = obs, y = -obs),
+              linetype = 2, color = "black") +
+    labs(
+        title = "Kriging Residuals",
+        x = element_blank(),
+        y = element_blank()
+    ) +
+    theme_minimal() -> g3
+
+grid.arrange(g1, g2, g3, nrow = 1,
+             bottom = textGrob("Observed Values"))

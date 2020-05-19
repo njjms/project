@@ -143,9 +143,9 @@ INPUT ./images/raw_histograms.png
 OUTPUT sunn_ms_report.pdf
 INPUT ./images/raw_histograms.png
 INPUT /var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map
-INPUT ./images/total_timber_map.png
-INPUT ./images/total_timber_map.png
-INPUT ./images/total_timber_map.png
+INPUT ./images/timber_annpre.png
+INPUT ./images/timber_annpre.png
+INPUT ./images/timber_annpre.png
 INPUT ./images/semivariogram_annpre.png
 INPUT ./images/semivariogram_annpre.png
 INPUT ./images/semivariogram_annpre.png
@@ -156,6 +156,12 @@ INPUT ./images/semivariogram_example.png
 INPUT ./images/residual_plots.png
 INPUT ./images/residual_plots.png
 INPUT ./images/residual_plots.png
+INPUT ./images/tshevol_residual_plots.png
+INPUT ./images/tshevol_residual_plots.png
+INPUT ./images/tshevol_residual_plots.png
+INPUT ./images/resampling_residual_plots.png
+INPUT ./images/resampling_residual_plots.png
+INPUT ./images/resampling_residual_plots.png
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmcsc10.tfm
 INPUT sunn_ms_report.aux
 INPUT sunn_ms_report.run.xml

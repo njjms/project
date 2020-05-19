@@ -122,6 +122,30 @@
       \verb 10.1007/s11432-015-0905-6
       \endverb
     \endentry
+    \entry{kis15}{article}{}
+      \name{author}{1}{}{%
+        {{hash=85e0f00507f871a7de270c50944a7a73}{%
+           family={Kis},
+           familyi={K\bibinitperiod},
+           given={Ivana\bibnamedelima Mesic},
+           giveni={I\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+      }
+      \strng{namehash}{85e0f00507f871a7de270c50944a7a73}
+      \strng{fullhash}{85e0f00507f871a7de270c50944a7a73}
+      \strng{bibnamehash}{85e0f00507f871a7de270c50944a7a73}
+      \strng{authorbibnamehash}{85e0f00507f871a7de270c50944a7a73}
+      \strng{authornamehash}{85e0f00507f871a7de270c50944a7a73}
+      \strng{authorfullhash}{85e0f00507f871a7de270c50944a7a73}
+      \field{sortinit}{K}
+      \field{sortinithash}{9fd838a31ba64d981e8f44562bd33f89}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{The Mining-Geology-Petroleum Engineering Bulletin}
+      \field{title}{Comparison of Ordinary and Universal Kriging interpolation techniques on a depth variable (a case of linear spatial trend), case study of the Sandrovac Field}
+      \field{year}{2015}
+      \field{pages}{41\bibrangedash 58}
+      \range{pages}{18}
+    \endentry
     \entry{madsen09}{article}{}
       \name{author}{1}{}{%
         {{hash=7e8245b23cc74078ff9b5beba22b6747}{%
